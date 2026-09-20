@@ -40,7 +40,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .kb-tab.active { background: #C61028; color: #fff; border-color: #C61028; }
 </style>
 </head>
-<body>
+<body><!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WQZVF638"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 <div style="width: 100%; background: #0E0E0E; color: #F2F0E8; font-family: Outfit, system-ui, sans-serif;">
 
   <header style="display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding: 18px clamp(20px, 4vw, 56px); background: #0E0E0E; position: sticky; top: 0; z-index: 40; border-bottom: 1px solid #262626;">
@@ -310,6 +313,8 @@ function pickVideo(n) {
   }
 }
 
+let kbEnviando = false;
+
 async function submitForm() {
   const nomeInput = document.getElementById('kb-nome');
   const foneInput = document.getElementById('kb-fone');
@@ -322,6 +327,9 @@ async function submitForm() {
     msgEl.textContent = 'Preencha seu nome e um WhatsApp com DDD.';
     return;
   }
+
+  if (kbEnviando) return;
+  kbEnviando = true;
 
   msgEl.textContent = 'Enviando...';
 
@@ -344,13 +352,16 @@ async function submitForm() {
   nomeInput.value = '';
   foneInput.value = '';
 
+  // Só dispara o evento de lead depois que nome + WhatsApp válidos foram enviados
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event: 'lead_whatsapp' });
+
   const texto = encodeURIComponent('Olá! Meu nome é ' + nome + ' e quero avaliar meu caso de implante.');
   window.open('https://wa.me/' + CLINICA_WHATSAPP + '?text=' + texto, '_blank');
+
+  kbEnviando = false;
 }
 </script>
 
-</body><!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WQZVF638"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+</body>
 </html>
